@@ -7,7 +7,7 @@
 
 static int            var_A = 1;
 static int            var_B = 1;
-static int          opt  = 1;
+static int          opt  = 0;
 
 //MODULE_PARM(var_A, "i");
 //MODULE_PARM(var_B, "i");
@@ -26,7 +26,7 @@ MODULE_PARM_DESC(var_B, "Second Value");
 static int __init mdule_init(void)
 {
    
-   printk("Launching Kernel Module Calc\n");
+   pr_alert("Launching Kernel Module Calc\n");
    switch(opt){
       case 1:
         printk("Operation is Sum\n");
@@ -39,6 +39,7 @@ static int __init mdule_init(void)
       case 3:
         printk("Operation is Multplication\n");
         printk("Result: %i \n", var_A*var_B);
+      break;
       /*
       case 4:
         printk("Operation is Division\n");
@@ -46,10 +47,9 @@ static int __init mdule_init(void)
       break;
       */
       default:
-        printk(KERN_WARNING  "Unknown Operation - using sum...\nResult: %i\n ", var_A+var_B );
+        printk("Unknown Operation\n");
       break;
    }
-   
 
    return 0;
 }
@@ -57,12 +57,9 @@ static int __init mdule_init(void)
 
 static void __exit mdule_exit(void)
 {
-   pr_alert( "Goodbye... :)");
+   pr_alert("Unloading km_calc module\n");
 }
 
-int strcmp(const char* s1, const char* s2)
-{
-    while(*s1 && (*s1==*s2))
-        s1++,s2++;
-    return *(const unsigned char*)s1-*(const unsigned char*)s2;
-}
+
+module_init(mdule_init);
+module_exit(mdule_exit);
